@@ -24,7 +24,7 @@ This script automates the installation of Docker on an Ubuntu system. It perform
 1. **Download and run the script:**
 
    ```sh
-   sudo wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_install.sh && sudo chmod +x docker_install.sh && sudo ./docker_install.sh
+   wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_install.sh && bash docker_install.sh
    ```
 
    The script will check if Docker is already installed. If it is, the script will print the installed version and exit. If not, it will proceed with the installation.
