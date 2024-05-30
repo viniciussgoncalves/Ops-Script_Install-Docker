@@ -134,7 +134,7 @@ print_success "Docker service enabled and started successfully."
 # Add current user to the Docker group
 print_start "Add user to Docker group"
 {
-  sudo usermod -aG docker $ORIGINAL_USER
+  sudo usermod -aG docker $USER
 } &>> $log_file
 check_command "Add user to Docker group"
 print_success "User added to Docker group successfully."

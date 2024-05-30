@@ -3,6 +3,7 @@
 ## Description
 
 This script automates the installation of Docker on an Ubuntu system. It performs the following steps:
+
 1. Checks if Docker is already installed. If installed, it prints the installed version and exits.
 2. Updates the system packages.
 3. Installs necessary dependencies.
@@ -22,11 +23,11 @@ This script automates the installation of Docker on an Ubuntu system. It perform
 
 1. **Download and run the script:**
 
-    ```sh
-    sudo wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_install.sh && sudo bash docker_install.sh
-    ```
+   ```sh
+   sudo wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_install.sh && sudo chmod +x docker_install.sh && sudo ./docker_install.sh
+   ```
 
-    The script will check if Docker is already installed. If it is, the script will print the installed version and exit. If not, it will proceed with the installation.
+   The script will check if Docker is already installed. If it is, the script will print the installed version and exit. If not, it will proceed with the installation.
 
 ## Script Details
 
@@ -69,10 +70,10 @@ Prints the start message for each step in blue.
                    '-- "--'  '--'
 
 ###################################################################
-# Script Name   : Script Install Docker                           #                                                                  
-# Description   : Script to install Docker                        #                                                     
-# Version       : 1.1                                             #                                              
-# Author        : Vinicius Gonçalves                              #     
+# Script Name   : Script Install Docker                           #
+# Description   : Script to install Docker                        #
+# Version       : 1.1                                             #
+# Author        : Vinicius Gonçalves                              #
 ###################################################################
 
 Starting: Package update
@@ -94,3 +95,4 @@ User added to Docker group successfully.
 Starting: Finalizing installation
 Installation complete! Please log out and log back in for the changes to take effect.
 Installation process completed.
+```
