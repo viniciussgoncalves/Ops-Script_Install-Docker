@@ -35,6 +35,12 @@ EOF
 
 print_header
 
+# Request sudo permissions at the beginning of the script
+sudo -v
+
+# Capture the original user
+ORIGINAL_USER=$(logname)
+
 # Function to check if Docker is installed
 check_docker_installed() {
   if command -v docker &> /dev/null; then
@@ -141,6 +147,6 @@ print_success "User added to Docker group successfully."
 
 # End
 print_start "Finalizing installation"
-echo -e "\e[32mInstallation complete! Please log out and log back in for the changes to take effect.\e[0m"  # Green text for final message
-echo "Installation complete! Please log out and log back in for the changes to take effect." >> $log_file
+echo -e "\e[32mInstallation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m"  # Green text for final message
+echo "Installation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> $log_file
 print_success "Installation process completed."
