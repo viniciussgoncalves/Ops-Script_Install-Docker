@@ -5,16 +5,16 @@
 This script automates the installation of Docker on various Linux distributions. It performs the following steps:
 
 1. Checks if Docker is already installed. If installed, it prints the installed version and exits.
-2. Updates the system packages.
-3. Installs necessary dependencies.
-4. Adds Docker's official GPG key (for applicable distributions).
-5. Adds the Docker repository to the system's package manager.
-6. Updates the package index again.
-7. Installs Docker packages.
-8. Enables and starts the Docker service.
-9. Adds the current user to the Docker group to allow Docker commands without `sudo`.
-10. Displays a progress spinner during installation steps.
-11. Displays a progress bar for the final step.
+2. Identifies the Linux distribution.
+3. Updates the system packages.
+4. Installs necessary dependencies.
+5. Adds Docker's official GPG key (for applicable distributions).
+6. Adds the Docker repository to the system's package manager.
+7. Updates the package index again.
+8. Installs Docker packages.
+9. Enables and starts the Docker service.
+10. Adds the current user to the Docker group to allow Docker commands without `sudo`.
+11. Displays a progress spinner during installation steps.
 
 ## Prerequisites
 
@@ -77,10 +77,6 @@ Returns the appropriate color code based on the Linux distribution.
 
 Displays a spinner to indicate progress during long-running operations.
 
-### progress_bar
-
-Displays a progress bar to indicate the progress of a specific step.
-
 ## Example Output
 
 ```plaintext
@@ -131,9 +127,7 @@ Starting: Add user to Docker group
  [\]
 User added to Docker group successfully.
 Starting: Finalizing installation
-▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇| 100%
+Installation process completed.
 
 WARNING: Please log out and log back in as user for the changes to take effect.
-
-Installation process completed.
 ```
