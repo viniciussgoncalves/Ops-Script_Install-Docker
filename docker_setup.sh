@@ -122,17 +122,15 @@ spinner() {
 
 # Function to show a progress bar
 progress_bar() {
-  local duration=$1
-  already_done() { for ((done=0; done<$elapsed; done++)); do printf "▇"; done }
-  remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf " "; done }
-  percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
-  clean_line() { printf "\r"; }
-  for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
-    already_done; remaining; percentage
-    sleep 1
-    clean_line
-  done
-  printf "\n"
+  local current_step=$1
+  local total_steps=$2
+  local progress=$(( (current_step * 100) / total_steps ))
+  local done=$((progress * 20 / 100))
+  local left=$((20 - done))
+  printf "\r["
+  for ((i = 0; i < done; i++)); do printf "▇"; done
+  for ((i = 0; i < left; i++)); do printf " "; done
+  printf "] %s%%" "$progress"
 }
 
 # Main script execution
@@ -161,6 +159,9 @@ main() {
   log_file="docker_install.log"
   > "$log_file"
 
+  total_steps=14
+  current_step=0
+
   # Update system packages
   print_start "Package update"
   {
@@ -172,7 +173,8 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Package update"
-  print_success "Package update completed successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Install dependencies
   print_start "Dependency installation"
@@ -187,7 +189,8 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Dependency installation"
-  print_success "Dependency installation completed successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Add Docker's official GPG key and repository based on the distribution
   case "$DISTRO" in
@@ -200,17 +203,19 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker GPG key"
-      print_success "Docker GPG key added successfully."
-      
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
+
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     debian)
       print_start "Add Docker GPG key"
       {
@@ -220,17 +225,19 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker GPG key"
-      print_success "Docker GPG key added successfully."
-      
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
+
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     raspbian)
       print_start "Add Docker GPG key"
       {
@@ -240,17 +247,19 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker GPG key"
-      print_success "Docker GPG key added successfully."
-      
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
+
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/raspbian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     centos)
       print_start "Add Docker repository"
       {
@@ -258,9 +267,10 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     fedora)
       print_start "Add Docker repository"
       {
@@ -268,9 +278,10 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     rhel)
       print_start "Add Docker repository"
       {
@@ -278,9 +289,10 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     sles)
       print_start "Add Docker repository"
       {
@@ -288,9 +300,10 @@ main() {
       } &>> "$log_file" &
       spinner $!
       check_command "Add Docker repository"
-      print_success "Docker repository added successfully."
+      current_step=$((current_step + 1))
+      progress_bar $current_step $total_steps
       ;;
-    
+
     *)
       echo -e "\e[31mUnsupported distribution: $DISTRO\e[0m"
       exit 1
@@ -308,7 +321,8 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Update package index"
-  print_success "Package index updated successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Install Docker packages
   print_start "Docker packages installation"
@@ -317,7 +331,8 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Docker packages installation"
-  print_success "Docker packages installed successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Enable and start Docker service
   print_start "Enable and start Docker service"
@@ -327,7 +342,8 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Enable and start Docker service"
-  print_success "Docker service enabled and started successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Add current user to the Docker group
   print_start "Add user to Docker group"
@@ -336,14 +352,15 @@ main() {
   } &>> "$log_file" &
   spinner $!
   check_command "Add user to Docker group"
-  print_success "User added to Docker group successfully."
+  current_step=$((current_step + 1))
+  progress_bar $current_step $total_steps
 
   # Show progress bar for final step
   print_start "Finalizing installation"
   progress_bar 10
+  print_success "\n\nInstallation process completed.\n"
   echo -e "\n\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # yellow text for warning message
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
-  print_success "Installation process completed."
 }
 
 # Execute the main function
