@@ -106,18 +106,33 @@ get_distro_color() {
 
 # Function to show a spinner
 spinner() {
-    local pid=$1
-    local delay=0.1
-    local spinstr='|/-\'
-    echo -n " "
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    echo "    "
+  local pid=$1
+  local delay=0.1
+  local spinstr='|/-\'
+  echo -n " "
+  while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+    local temp=${spinstr#?}
+    printf " [%c]  " "$spinstr"
+    local spinstr=$temp${spinstr%"$temp"}
+    sleep $delay
+    printf "\b\b\b\b\b\b"
+  done
+  echo "    "
+}
+
+# Function to show a progress bar
+progress_bar() {
+  local duration=$1
+  already_done() { for ((done=0; done<$elapsed; done++)); do printf "▇"; done }
+  remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf " "; done }
+  percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
+  clean_line() { printf "\r"; }
+  for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
+    already_done; remaining; percentage
+    sleep 1
+    clean_line
+  done
+  printf "\n"
 }
 
 # Main script execution
@@ -323,11 +338,12 @@ main() {
   check_command "Add user to Docker group"
   print_success "User added to Docker group successfully."
 
-  # End
+  # Show progress bar for final step
   print_start "Finalizing installation"
-  print_success "Installation process completed."
-  echo -e "\n\n\e[32mPlease log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Green text for final message
+  progress_bar 10
+  echo -e "\n\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # yellow text for warning message
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
+  print_success "Installation process completed."
 }
 
 # Execute the main function

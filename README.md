@@ -14,6 +14,7 @@ This script automates the installation of Docker on various Linux distributions.
 8. Enables and starts the Docker service.
 9. Adds the current user to the Docker group to allow Docker commands without `sudo`.
 10. Displays a progress spinner during installation steps.
+11. Displays a progress bar for the final step.
 
 ## Prerequisites
 
@@ -76,6 +77,10 @@ Returns the appropriate color code based on the Linux distribution.
 
 Displays a spinner to indicate progress during long-running operations.
 
+### progress_bar
+
+Displays a progress bar to indicate the progress of a specific step.
+
 ## Example Output
 
 ```plaintext
@@ -126,7 +131,9 @@ Starting: Add user to Docker group
  [\]
 User added to Docker group successfully.
 Starting: Finalizing installation
-Installation process completed.
+▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇| 100%
 
-Please log out and log back in as original_user for the changes to take effect.
+WARNING: Please log out and log back in as user for the changes to take effect.
+
+Installation process completed.
 ```
