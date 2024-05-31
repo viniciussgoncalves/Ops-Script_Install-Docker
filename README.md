@@ -13,6 +13,7 @@ This script automates the installation of Docker on various Linux distributions.
 7. Installs Docker packages.
 8. Enables and starts the Docker service.
 9. Adds the current user to the Docker group to allow Docker commands without `sudo`.
+10. Displays a progress spinner during installation steps.
 
 ## Prerequisites
 
@@ -67,6 +68,14 @@ Prints the start message for each step in blue.
 
 Identifies the current Linux distribution.
 
+### get_distro_color
+
+Returns the appropriate color code based on the Linux distribution.
+
+### spinner
+
+Displays a spinner to indicate progress during long-running operations.
+
 ## Example Output
 
 ```plaintext
@@ -90,23 +99,34 @@ Identifies the current Linux distribution.
 # Author        : Vinicius Gonçalves                                           #
 ################################################################################
 
+Installing Docker on Ubuntu distribution
+
 Starting: Package update
+ [|]
 Package update completed successfully.
 Starting: Dependency installation
+ [-]
 Dependency installation completed successfully.
 Starting: Add Docker GPG key
+ [/]
 Docker GPG key added successfully.
 Starting: Add Docker repository
+ [\]
 Docker repository added successfully.
 Starting: Update package index
+ [|]
 Package index updated successfully.
 Starting: Docker packages installation
+ [-]
 Docker packages installed successfully.
 Starting: Enable and start Docker service
+ [/]
 Docker service enabled and started successfully.
 Starting: Add user to Docker group
+ [\]
 User added to Docker group successfully.
 Starting: Finalizing installation
-Installation complete! Please log out and log back in as original_user for the changes to take effect.
 Installation process completed.
+
+Please log out and log back in as original_user for the changes to take effect.
 ```

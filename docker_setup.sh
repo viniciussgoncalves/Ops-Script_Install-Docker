@@ -104,6 +104,22 @@ get_distro_color() {
   esac
 }
 
+# Function to show a spinner
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    echo -n " "
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b\b\b\b"
+    done
+    echo "    "
+}
+
 # Main script execution
 main() {
   print_header
@@ -138,7 +154,8 @@ main() {
     else
       sudo apt-get update -y
     fi
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Package update"
   print_success "Package update completed successfully."
 
@@ -152,7 +169,8 @@ main() {
     else
       sudo apt-get install -y ca-certificates curl
     fi
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Dependency installation"
   print_success "Dependency installation completed successfully."
 
@@ -164,14 +182,16 @@ main() {
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker GPG key"
       print_success "Docker GPG key added successfully."
       
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -182,14 +202,16 @@ main() {
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker GPG key"
       print_success "Docker GPG key added successfully."
       
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -200,14 +222,16 @@ main() {
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker GPG key"
       print_success "Docker GPG key added successfully."
       
       print_start "Add Docker repository"
       {
         echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/raspbian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -216,7 +240,8 @@ main() {
       print_start "Add Docker repository"
       {
         sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -225,7 +250,8 @@ main() {
       print_start "Add Docker repository"
       {
         sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -234,7 +260,8 @@ main() {
       print_start "Add Docker repository"
       {
         sudo yum-config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -243,7 +270,8 @@ main() {
       print_start "Add Docker repository"
       {
         sudo zypper addrepo https://download.docker.com/linux/sles/docker-ce.repo
-      } &>> "$log_file"
+      } &>> "$log_file" &
+      spinner $!
       check_command "Add Docker repository"
       print_success "Docker repository added successfully."
       ;;
@@ -262,7 +290,8 @@ main() {
     else
       sudo apt-get update -y
     fi
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Update package index"
   print_success "Package index updated successfully."
 
@@ -270,7 +299,8 @@ main() {
   print_start "Docker packages installation"
   {
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Docker packages installation"
   print_success "Docker packages installed successfully."
 
@@ -279,7 +309,8 @@ main() {
   {
     sudo systemctl enable docker
     sudo systemctl start docker
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Enable and start Docker service"
   print_success "Docker service enabled and started successfully."
 
@@ -287,15 +318,16 @@ main() {
   print_start "Add user to Docker group"
   {
     sudo usermod -aG docker "$ORIGINAL_USER"
-  } &>> "$log_file"
+  } &>> "$log_file" &
+  spinner $!
   check_command "Add user to Docker group"
   print_success "User added to Docker group successfully."
 
   # End
   print_start "Finalizing installation"
   print_success "Installation process completed."
-  echo -e "\n\n\e[32mPlease log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m"  # Green text for final message
-  echo "Installation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
+  echo -e "\n\n\e[32mPlease log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Green text for final message
+  echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
 }
 
 # Execute the main function
