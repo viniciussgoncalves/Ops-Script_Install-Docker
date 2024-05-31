@@ -46,7 +46,7 @@ check_docker_installed() {
 check_command() {
   if [ $? -ne 0 ]; then
     echo -e "\e[1m\e[31mError: $1 failed.\e[0m"  # Red text for errors
-    echo "Error: $1 failed." >> docker_install.log
+    echo "Error: $1 failed." >> docker_setup.log
     exit 1
   fi
 }
@@ -54,13 +54,13 @@ check_command() {
 # Function to print success messages in green
 print_success() {
   echo -e "\e[1m\e[32m$1\e[0m\n"  # Green text for success and new line for spacing
-  echo "$1" >> docker_install.log
+  echo "$1" >> docker_setup.log
 }
 
 # Function to print start messages in blue
 print_start() {
   echo -e "\e[1m\e[34mStarting: $1\e[0m"  # Blue text for steps starting
-  echo "Starting: $1" >> docker_install.log
+  echo "Starting: $1" >> docker_setup.log
 }
 
 # Function to identify the distribution
@@ -142,7 +142,7 @@ main() {
   check_docker_installed
 
   # Create and clear the log file
-  log_file="docker_install.log"
+  log_file="docker_setup.log"
   > "$log_file"
 
   # Update system packages
@@ -335,7 +335,7 @@ main() {
   # End
   print_start "Finalizing installation"
   print_success "Installation process completed."
-  echo -e "\n\n\e[1m\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Yellow text for warning message in bold
+  echo -e "\n\n\e[1m\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect\e[0m\n\n"  # Yellow text for warning message in bold
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
 }
 
