@@ -9,7 +9,7 @@
 
 # Function to print ASCII art and script information
 print_header() {
-  echo -e "\e[34m"
+  echo -e "\e[1m\e[34m"
   cat << "EOF"
                         .="=.
                       _/.-.-.\_     _
@@ -24,20 +24,19 @@ print_header() {
      `"""""""""`  ,--`,--'\/\    /
                    '-- "--'  '--'
 EOF
-  echo -e "\e[32m
+  echo -e "\e[1m\e[32m
 ################################################################################
 # Script Name   : Docker Setup
 # Description   : Script to install Docker
 # Version       : 2.0
 # Author        : Vinicius Gonçalves
-################################################################################"
-  echo -e "\e[0m"
+################################################################################\e[0m"
 }
 
 # Function to check if Docker is installed
 check_docker_installed() {
   if command -v docker &> /dev/null; then
-    echo -e "\e[32mDocker is already installed:\e[0m"
+    echo -e "\e[1m\e[32mDocker is already installed:\e[0m"
     docker --version
     exit 0
   fi
@@ -46,7 +45,7 @@ check_docker_installed() {
 # Function to check the status of the last executed command
 check_command() {
   if [ $? -ne 0 ]; then
-    echo -e "\e[31mError: $1 failed.\e[0m"  # Red text for errors
+    echo -e "\e[1m\e[31mError: $1 failed.\e[0m"  # Red text for errors
     echo "Error: $1 failed." >> docker_install.log
     exit 1
   fi
@@ -54,13 +53,13 @@ check_command() {
 
 # Function to print success messages in green
 print_success() {
-  echo -e "\e[32m$1\e[0m"  # Green text for success
+  echo -e "\e[1m\e[32m$1\e[0m\n"  # Green text for success and new line for spacing
   echo "$1" >> docker_install.log
 }
 
 # Function to print start messages in blue
 print_start() {
-  echo -e "\e[34mStarting: $1\e[0m"  # Blue text for steps starting
+  echo -e "\e[1m\e[34mStarting: $1\e[0m"  # Blue text for steps starting
   echo "Starting: $1" >> docker_install.log
 }
 
@@ -78,28 +77,28 @@ identify_distribution() {
 get_distro_color() {
   case "$DISTRO" in
     ubuntu)
-      echo -e "\e[38;5;208m"  # Orange
+      echo -e "\e[1m\e[38;5;208m"  # Orange
       ;;
     debian)
-      echo -e "\e[31m"  # Red
+      echo -e "\e[1m\e[31m"  # Red
       ;;
     raspbian)
-      echo -e "\e[31m"  # Red
+      echo -e "\e[1m\e[31m"  # Red
       ;;
     centos)
-      echo -e "\e[34m"  # Blue
+      echo -e "\e[1m\e[34m"  # Blue
       ;;
     fedora)
-      echo -e "\e[34m"  # Blue
+      echo -e "\e[1m\e[34m"  # Blue
       ;;
     rhel)
-      echo -e "\e[31m"  # Red
+      echo -e "\e[1m\e[31m"  # Red
       ;;
     sles)
-      echo -e "\e[32m"  # Green
+      echo -e "\e[1m\e[32m"  # Green
       ;;
     *)
-      echo -e "\e[37m"  # Default to white
+      echo -e "\e[1m\e[37m"  # Default to white
       ;;
   esac
 }
@@ -137,7 +136,7 @@ main() {
   DISTRO_COLOR=$(get_distro_color)
 
   # Print the distribution name
-  echo -e "\n\nInstalling Docker on ${DISTRO_COLOR}${DISTRO}\e[0m distribution\n\n"
+  echo -e "\n\n\e[1mInstalling Docker on ${DISTRO_COLOR}${DISTRO}\e[0m distribution\n\n"
 
   # Check if Docker is already installed
   check_docker_installed
@@ -326,7 +325,7 @@ main() {
   # End
   print_start "Finalizing installation"
   print_success "Installation process completed."
-  echo -e "\n\n\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Yellow text for warning message
+  echo -e "\n\n\e[1m\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Yellow text for warning message in bold
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
 }
 
