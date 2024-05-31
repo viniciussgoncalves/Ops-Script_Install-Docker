@@ -74,6 +74,36 @@ identify_distribution() {
   fi
 }
 
+# Function to get the distribution color
+get_distro_color() {
+  case "$DISTRO" in
+    ubuntu)
+      echo -e "\e[38;5;208m"  # Orange
+      ;;
+    debian)
+      echo -e "\e[31m"  # Red
+      ;;
+    raspbian)
+      echo -e "\e[31m"  # Red
+      ;;
+    centos)
+      echo -e "\e[34m"  # Blue
+      ;;
+    fedora)
+      echo -e "\e[34m"  # Blue
+      ;;
+    rhel)
+      echo -e "\e[31m"  # Red
+      ;;
+    sles)
+      echo -e "\e[32m"  # Green
+      ;;
+    *)
+      echo -e "\e[37m"  # Default to white
+      ;;
+  esac
+}
+
 # Main script execution
 main() {
   print_header
@@ -86,6 +116,12 @@ main() {
 
   # Identify the distribution
   identify_distribution
+
+  # Get the distribution color
+  DISTRO_COLOR=$(get_distro_color)
+
+  # Print the distribution name
+  echo -e "\n\nInstalling Docker on ${DISTRO_COLOR}${DISTRO}\e[0m distribution\n\n"
 
   # Check if Docker is already installed
   check_docker_installed
@@ -257,9 +293,9 @@ main() {
 
   # End
   print_start "Finalizing installation"
-  echo -e "\e[32mInstallation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m"  # Green text for final message
-  echo "Installation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
   print_success "Installation process completed."
+  echo -e "\n\n\e[32mPlease log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m"  # Green text for final message
+  echo "Installation complete! Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
 }
 
 # Execute the main function
