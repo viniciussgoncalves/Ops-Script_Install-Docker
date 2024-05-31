@@ -1,14 +1,14 @@
-# Docker Install Script
+# Docker Setup Script
 
 ## Description
 
-This script automates the installation of Docker on an Ubuntu system. It performs the following steps:
+This script automates the installation of Docker on various Linux distributions. It performs the following steps:
 
 1. Checks if Docker is already installed. If installed, it prints the installed version and exits.
 2. Updates the system packages.
 3. Installs necessary dependencies.
-4. Adds Docker's official GPG key.
-5. Adds the Docker repository to the system's Apt sources.
+4. Adds Docker's official GPG key (for applicable distributions).
+5. Adds the Docker repository to the system's package manager.
 6. Updates the package index again.
 7. Installs Docker packages.
 8. Enables and starts the Docker service.
@@ -16,15 +16,25 @@ This script automates the installation of Docker on an Ubuntu system. It perform
 
 ## Prerequisites
 
-- An Ubuntu-based system.
+- A supported Linux distribution.
 - `sudo` privileges.
+
+## Supported Distributions
+
+- Ubuntu
+- Debian
+- Raspbian
+- CentOS
+- Fedora
+- Red Hat Enterprise Linux (RHEL)
+- SUSE Linux Enterprise Server (SLES)
 
 ## Usage
 
 1. **Download and run the script:**
 
    ```sh
-   wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_install.sh && bash docker_install.sh
+   sudo wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_setup.sh && sudo chmod +x docker_setup.sh && sudo ./docker_setup.sh
    ```
 
    The script will check if Docker is already installed. If it is, the script will print the installed version and exit. If not, it will proceed with the installation.
@@ -53,6 +63,10 @@ Prints success messages in green.
 
 Prints the start message for each step in blue.
 
+### identify_distribution
+
+Identifies the current Linux distribution.
+
 ## Example Output
 
 ```plaintext
@@ -69,12 +83,12 @@ Prints the start message for each step in blue.
      `"""""""""`  ,--`,--'\/\    /
                    '-- "--'  '--'
 
-###################################################################
-# Script Name   : Script Install Docker                           #
-# Description   : Script to install Docker                        #
-# Version       : 1.1                                             #
-# Author        : Vinicius Gonçalves                              #
-###################################################################
+################################################################################
+# Script Name   : Docker Setup                                                 #
+# Description   : Script to install Docker                                     #
+# Version       : 2.0                                                          #
+# Author        : Vinicius Gonçalves                                           #
+################################################################################
 
 Starting: Package update
 Package update completed successfully.
@@ -93,6 +107,6 @@ Docker service enabled and started successfully.
 Starting: Add user to Docker group
 User added to Docker group successfully.
 Starting: Finalizing installation
-Installation complete! Please log out and log back in for the changes to take effect.
+Installation complete! Please log out and log back in as original_user for the changes to take effect.
 Installation process completed.
 ```
