@@ -34,7 +34,7 @@ This script automates the installation of Docker on various Linux distributions.
 1. **Download and run the script:**
 
    ```sh
-   sudo wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_setup.sh && sudo chmod +x docker_setup.sh && sudo ./docker_setup.sh
+   wget https://raw.githubusercontent.com/viniciussgoncalves/Ops-Script_Install_Docker/main/docker_setup.sh && bash docker_setup.sh
    ```
 
    The script will check if Docker is already installed. If it is, the script will print the installed version and exit. If not, it will proceed with the installation.
