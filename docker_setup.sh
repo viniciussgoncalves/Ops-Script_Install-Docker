@@ -127,10 +127,13 @@ progress_bar() {
   local progress=$(( (current_step * 100) / total_steps ))
   local done=$((progress * 20 / 100))
   local left=$((20 - done))
-  printf "\r["
+  tput sc  # Save cursor position
+  tput cup $(tput lines) 0  # Move cursor to the bottom line
+  printf "["
   for ((i = 0; i < done; i++)); do printf "▇"; done
   for ((i = 0; i < left; i++)); do printf " "; done
   printf "] %s%%" "$progress"
+  tput rc  # Restore cursor position
 }
 
 # Main script execution
@@ -159,7 +162,7 @@ main() {
   log_file="docker_install.log"
   > "$log_file"
 
-  total_steps=14
+  total_steps=14  # Certifique-se de que total_steps está inicializado corretamente
   current_step=0
 
   # Update system packages
@@ -357,7 +360,7 @@ main() {
 
   # Show progress bar for final step
   print_start "Finalizing installation"
-  progress_bar 10
+  progress_bar $total_steps $total_steps
   print_success "\n\nInstallation process completed.\n"
   echo -e "\n\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # yellow text for warning message
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
