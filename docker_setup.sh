@@ -326,7 +326,7 @@ main() {
   # End
   print_start "Finalizing installation"
   print_success "Installation process completed."
-  echo -e "\n\n\e[32mPlease log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Green text for final message
+  echo -e "\n\n\e[33mWARNING: Please log out and log back in as $ORIGINAL_USER for the changes to take effect.\e[0m\n"  # Yellow text for warning message
   echo "Please log out and log back in as $ORIGINAL_USER for the changes to take effect." >> "$log_file"
 }
 
